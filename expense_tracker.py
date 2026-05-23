@@ -60,7 +60,7 @@ def save_expense_to_file(expense: Expense, expense_file_path):
 
 
 def summarize_expense(expense_file_path):
-    expenses = []
+    expenses: list[Expense] = []
     with open(expense_file_path, "r") as f:
         lines = f.readlines()
         for line in lines:
@@ -68,7 +68,21 @@ def summarize_expense(expense_file_path):
             line_expense = Expense(name=expense_name, category=expense_category, amount=float(expense_amount))
             expenses.append(line_expense)
 
-    print(expenses)
+    amount_by_category = {}
+
+    for expense in expenses:
+        key = expense.category
+
+        if key in amount_by_category:
+            amount_by_category[key] += expense.amount
+        else:
+            amount_by_category[key] = expense.amount
+
+
+
+    for key, amount in amount_by_category.items():
+        print(f"{key}: {amount:.2f}")
+    
     
 
 
