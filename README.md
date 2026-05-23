@@ -9,7 +9,7 @@ An expense tracker built with Python.
 - Store expense data
 - Summarize expenses
 
-## How to Run
+## How to Rungit
 
 ```bash
 python expense_tracker.py
