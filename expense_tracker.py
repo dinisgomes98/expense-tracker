@@ -2,7 +2,7 @@ from expense import Expense
 
 
 def main():
-    print(f"Running Expense Tracker!")
+    print("Running Expense Tracker!")
 
     expense_file_path = "expenses.csv"
 
@@ -32,7 +32,13 @@ def get_user_expense():
             print(f"{i+1}. {category_name}")
 
         value_range = f"[1 - {len(expense_categories)}]"
-        selected_index = int(input(f"Enter a category number {value_range}: ")) - 1
+        
+        try:
+            selected_index = int(input(f"Enter a category number {value_range}: ")) - 1
+        except ValueError:
+            print("Please enter a valid number")
+            continue
+
 
         if selected_index in range(len(expense_categories)):
             expense_category = expense_categories[selected_index]
@@ -40,9 +46,13 @@ def get_user_expense():
         else:
             print("Invalid category. Please try again!")
         
-    
-     
-    expense_amount = float(input("Enter expense amount: "))
+    while True:
+        try: 
+            expense_amount = float(input("Enter expense amount: "))
+            break
+        except ValueError:
+            print("Please enter a valid amount")
+            
 
     new_expense = Expense(name=expense_name, category=expense_category, amount=expense_amount)
 
@@ -55,7 +65,7 @@ def save_expense_to_file(expense: Expense, expense_file_path):
     print(f"save {expense} to {expense_file_path}")
 
     with open(expense_file_path, "a") as f:
-        f.write(f"{expense.name}, {expense.category}, {expense.amount}\n")
+        f.write(f"{expense.name},{expense.category},{expense.amount}\n")
     
 
 
@@ -81,7 +91,7 @@ def summarize_expense(expense_file_path):
 
 
     for key, amount in amount_by_category.items():
-        print(f"{key}: {amount:.2f}")
+        print(f"{key}: {amount:.2f}€")
     
     
 
