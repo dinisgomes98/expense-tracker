@@ -6,16 +6,41 @@ def main():
 
     expense_file_path = "expenses.csv"
 
-    #get user input
-    expense = get_user_expense()
-    print(expense)
 
+    option = 0
 
-    #write expenses to a file
-    save_expense_to_file(expense, expense_file_path)
+    while option != 3:
+        print("*** Expense Tracker ***")
+        print("1) Add expense")
+        print("2) Check summary")
+        print("3) Quit")
 
-    #read file and summarize expenses
-    summarize_expense(expense_file_path)
+        try:
+            option = int(input("Choose an option >>> "))
+        except ValueError:
+            print("Please enter a number from 1 to 3")
+            continue
+
+        if option == 1:
+            #get user input
+            expense = get_user_expense()
+            
+            #write expenses to a file
+            save_expense_to_file(expense, expense_file_path)          
+        
+        elif option == 2:
+            #read file and summarize expenses
+            summarize_expense(expense_file_path)
+            
+
+        elif option == 3:
+            print("Quitting program")
+
+        else:
+            print("Invalid option. Please choose from 1 to 3")
+
+    print("Program closed!")
+
 
     
 
@@ -71,12 +96,18 @@ def save_expense_to_file(expense: Expense, expense_file_path):
 
 def summarize_expense(expense_file_path):
     expenses: list[Expense] = []
-    with open(expense_file_path, "r") as f:
-        lines = f.readlines()
-        for line in lines:
-            expense_name, expense_category, expense_amount = line.strip().split(",")
-            line_expense = Expense(name=expense_name, category=expense_category, amount=float(expense_amount))
-            expenses.append(line_expense)
+    
+    try:
+        with open(expense_file_path, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                expense_name, expense_category, expense_amount = line.strip().split(",")
+                line_expense = Expense(name=expense_name, category=expense_category, amount=float(expense_amount))
+                expenses.append(line_expense)
+    except FileNotFoundError:
+        print("No expenses found")
+        return
+
 
     amount_by_category = {}
 
