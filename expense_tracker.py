@@ -9,16 +9,17 @@ def main():
 
     option = 0
 
-    while option != 3:
+    while option != 4:
         print("*** Expense Tracker ***")
         print("1) Add expense")
         print("2) Check summary")
-        print("3) Quit")
+        print("3) Check balance")
+        print("4) Quit")
 
         try:
             option = int(input("Choose an option >>> "))
         except ValueError:
-            print("Please enter a number from 1 to 3")
+            print("Please enter a number from 1 to 4")
             continue
 
         if option == 1:
@@ -30,14 +31,16 @@ def main():
         
         elif option == 2:
             #read file and summarize expenses
-            summarize_expense(expense_file_path)
-            
-
+            summarize_expenses(expense_file_path)
+                                    
         elif option == 3:
+            check_balance(expense_file_path)            
+
+        elif option == 4:
             print("Quitting program")
 
         else:
-            print("Invalid option. Please choose from 1 to 3")
+            print("Invalid option. Please choose from 1 to 4")
 
     print("Program closed!")
 
@@ -91,23 +94,10 @@ def save_expense_to_file(expense: Expense, expense_file_path):
 
     with open(expense_file_path, "a") as f:
         f.write(f"{expense.name},{expense.category},{expense.amount}\n")
-    
 
 
-def summarize_expense(expense_file_path):
-    expenses: list[Expense] = []
-    
-    try:
-        with open(expense_file_path, "r") as f:
-            lines = f.readlines()
-            for line in lines:
-                expense_name, expense_category, expense_amount = line.strip().split(",")
-                line_expense = Expense(name=expense_name, category=expense_category, amount=float(expense_amount))
-                expenses.append(line_expense)
-    except FileNotFoundError:
-        print("No expenses found")
-        return
-
+def summarize_expenses(expense_file_path):
+    expenses = load_expenses(expense_file_path)
 
     amount_by_category = {}
 
@@ -119,11 +109,47 @@ def summarize_expense(expense_file_path):
         else:
             amount_by_category[key] = expense.amount
 
-
-
     for key, amount in amount_by_category.items():
         print(f"{key}: {amount:.2f}€")
     
+
+def check_balance(expense_file_path):
+    expenses = load_expenses(expense_file_path)
+
+    total_expenses = 0
+
+    for expense in expenses:
+        total_expenses += expense.amount
+
+    while True:
+        try:
+            budget = float(input("Enter your budget: "))
+            break
+        except ValueError:
+            print("Please enter a valid budget.")
+
+    balance = budget - total_expenses
+
+    print(f"Budget: {budget:.2f}€")
+    print(f"Total expenses: {total_expenses:.2f}€")
+    print(f"Remaining balance: {balance:.2f}€")
+
+
+def load_expenses(expense_file_path):
+    expenses: list[Expense] = []
+    
+    try:
+        with open(expense_file_path, "r") as f:
+            lines = f.readlines()
+            for line in lines:
+                expense_name, expense_category, expense_amount = line.strip().split(",")
+                line_expense = Expense(name=expense_name, category=expense_category, amount=float(expense_amount))
+                expenses.append(line_expense)
+    except FileNotFoundError:
+        print("No expenses found")
+        return []
+
+    return expenses
     
 
 
