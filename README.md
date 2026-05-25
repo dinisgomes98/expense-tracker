@@ -6,8 +6,10 @@ An expense tracker built with Python.
 
 - Add expenses
 - Select expense categories
-- Store expense data
-- Summarize expenses
+- Save expenses to a CSV file
+- View expense summary by category
+- Check remaining balance against a budget
+- Input validation for menu options and amounts
 
 ## How to Rungit
 
@@ -32,9 +34,11 @@ The goal is to practice:
 
 - Working with functions and program flow
 - Creating and using Python classes
-- Handling user input in the terminal
-- Organizing code into smaller components
-- Working with CSV files
+- Reading and writing CSV files
+- Organizing code into reusable functions
+- Handling user input and validation
+- Refactoring repeated logic
+- Working with lists and dictionaries
 - Using Git and GitHub for version control
 
 
